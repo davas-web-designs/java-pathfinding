@@ -16,7 +16,7 @@ class drawGrid extends JFrame {
 	public drawGrid(){       
 		setSize( 500, 500 );
 		setVisible( true );  
-		solve(1,1); 
+		bfs(1,1); 
 	} 
 	public void paint( Graphics g ){
 		int i = 0;
@@ -39,21 +39,42 @@ class drawGrid extends JFrame {
 		}	
 	}
 	//DFS:
-	public void solve(int r, int c){
+	public void dfs(int r, int c){
 		if(maze[r][c] != 3){
 			maze[r][c] = 9;
 			ArrayList<IntPair> n = neighbours(r,c);
 			for(IntPair i: n){
 				System.out.println("(" + i.x + " , "+ i.y + ")");
-				if(maze[i.x][i.y] == 0){
-					solve(i.x, i.y);
-				}			
+				if(maze[i.x][i.y] == 3)System.out.println("Goal!");	
+				else if(maze[i.x][i.y] == 0){
+					dfs(i.x, i.y);
+				}
+						
 			}
 		}else{
-			System.out.println("He llegao");		
+			System.out.println("Goal!");		
 		}
 	}
-
+	//BFS:
+	public void bfs(int r, int c){
+		Queue<IntPair> q = new LinkedList();
+		IntPair start_v = new IntPair(r,c);
+		q.add(start_v);
+		while(q.size() > 0){
+			IntPair p = q.remove();
+			if(maze[p.x][p.y] == 3) System.out.println("GOAL!");
+			else{
+				ArrayList<IntPair> n = neighbours(p.x,p.y);
+				for(IntPair i: n){
+					System.out.println("(" + i.x + " , "+ i.y + ")");
+					if(maze[i.x][i.y] == 0){
+						maze[i.x][i.y] = 9;
+						q.add(i);
+					}					
+				}			
+			}	
+		}
+	}
 
 	public ArrayList<IntPair> neighbours(int a, int b){
 		ArrayList<IntPair> n = new ArrayList<IntPair>();
