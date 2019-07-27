@@ -41,12 +41,20 @@ class drawGrid extends JFrame {
 	//DFS:
 	public void dfs(int r, int c){
 		if(maze[r][c] != 3){
+			repaint();
+			System.out.println("Calling dfs on: " + r + " " + c);
 			maze[r][c] = 9;
 			ArrayList<IntPair> n = neighbours(r,c);
 			for(IntPair i: n){
 				System.out.println("(" + i.x + " , "+ i.y + ")");
-				if(maze[i.x][i.y] == 3)System.out.println("Goal!");	
+				if(maze[i.x][i.y] == 3)return;
 				else if(maze[i.x][i.y] == 0){
+					try{
+						Thread.sleep(500);
+					}catch(InterruptedException ex){
+						ex.printStackTrace();		
+					}
+					
 					dfs(i.x, i.y);
 				}
 						
@@ -67,9 +75,16 @@ class drawGrid extends JFrame {
 				ArrayList<IntPair> n = neighbours(p.x,p.y);
 				for(IntPair i: n){
 					System.out.println("(" + i.x + " , "+ i.y + ")");
+					if(maze[i.x][i.y] == 3)return;
 					if(maze[i.x][i.y] == 0){
 						maze[i.x][i.y] = 9;
 						q.add(i);
+						try{
+							Thread.sleep(500);
+						}catch(InterruptedException ex){
+							ex.printStackTrace();		
+						}
+						repaint();
 					}					
 				}			
 			}	
@@ -79,19 +94,19 @@ class drawGrid extends JFrame {
 	public ArrayList<IntPair> neighbours(int a, int b){
 		ArrayList<IntPair> n = new ArrayList<IntPair>();
 
-		if(maze[a][b+1] == 0){
+		if(maze[a][b+1] != 1){
 			IntPair p = new IntPair(a, b+1);
 			n.add(p);	
 		}
-		if(maze[a][b-1] == 0){
+		if(maze[a][b-1] != 1){
 			IntPair p = new IntPair(a,b-1);
 			n.add(p);
 		}
-		if(maze[a+1][b] == 0){
+		if(maze[a+1][b] != 1){
 			IntPair p = new IntPair(a+1,b);
 			n.add(p);
 		}
-		if(maze[a-1][b] == 0){
+		if(maze[a-1][b] != 1){
 			IntPair p = new IntPair(a-1,b);
 			n.add(p);	
 		}
@@ -101,16 +116,17 @@ class drawGrid extends JFrame {
 	private int s = 30;
 	private int w = 10;
 	private int[][] maze = {
-				{1,1,1,1,1,1,1,1,1,1},
-				{1,2,0,0,0,0,1,1,1,1},
-				{1,0,1,1,1,0,1,1,1,1},
-				{1,0,1,0,0,0,1,1,1,1},
-				{1,0,1,1,1,0,1,1,1,1},
-				{1,0,0,0,0,0,0,0,1,1},
-				{1,1,0,1,1,0,1,0,1,1},
-				{1,1,0,0,0,0,1,0,1,1},
-				{1,1,1,1,1,0,1,0,3,1},
-				{1,1,1,1,1,1,1,1,1,1}
+			   //0 1 2 3 4 5 6 7 8 9
+				{1,1,1,1,1,1,1,1,1,1}, //0
+				{1,2,0,0,0,0,1,1,1,1}, //1
+				{1,0,1,1,1,0,1,1,1,1}, //2 
+				{1,0,1,0,0,0,1,1,1,1}, //3
+				{1,0,1,1,1,0,1,1,1,1}, //4
+				{1,0,0,0,0,0,0,0,1,1}, //5
+				{1,1,0,1,1,0,1,0,1,1}, //6
+				{1,1,0,0,0,0,1,0,1,1}, //7
+				{1,1,3,1,1,0,1,0,0,1}, //8
+				{1,1,1,1,1,1,1,1,1,1}  //9
 		};
 	
 }
